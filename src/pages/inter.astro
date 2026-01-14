@@ -1,21 +1,23 @@
 ---
+/* 导入基础布局组件 */
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Astro Interactive">
   <main>
+    <!-- 加载时显示的骨架屏 -->
     <div id="loading" class="skeleton-container">
-      <!-- Title skeleton -->
+      <!-- 标题骨架 -->
       <div class="skeleton-title"></div>
 
-      <!-- Description skeleton -->
+      <!-- 描述文本骨架 -->
       <div class="skeleton-description">
         <div class="skeleton-line skeleton-line-long"></div>
         <div class="skeleton-line skeleton-line-medium"></div>
         <div class="skeleton-line skeleton-line-short"></div>
       </div>
 
-      <!-- Cards skeleton -->
+      <!-- 卡片列表骨架 -->
       <ul class="skeleton-card-grid">
         <li class="skeleton-card">
           <div class="skeleton-card-header"></div>
@@ -34,72 +36,76 @@ import Layout from "../layouts/Layout.astro";
         </li>
       </ul>
     </div>
+    <!-- 实际内容区域（初始隐藏） -->
     <div id="content" style="display: none;">
-      <h1>Interactive <span id="title"></span></h1>
-      <p class="instructions" id="description"></p>
-      <ul role="list" class="link-card-grid" id="cards-list"></ul>
+      <h1>Interactive <span id="title"></span></h1>  <!-- 动态标题 -->
+      <p class="instructions" id="description"></p>  <!-- 动态描述 -->
+      <ul role="list" class="link-card-grid" id="cards-list"></ul>  <!-- 动态卡片列表 -->
     </div>
   </main>
 </Layout>
 
 <script>
+  /* 定义卡片数据接口 */
   interface CardData {
-    href: string;
-    title: string;
-    body: string;
+    href: string;      /* 卡片链接地址 */
+    title: string;     /* 卡片标题 */
+    body: string;      /* 卡片描述 */
   }
 
+  /* 定义描述数据接口 */
   interface DescriptionData {
-    title: string;
-    titleHtml: string;
-    text: string;
-    code: string;
+    title: string;     /* 标题文本 */
+    titleHtml: string; /* HTML格式的标题 */
+    text: string;      /* 描述文本 */
+    code: string;      /* 代码信息 */
   }
 
-  // Fetch data from API routes
+  /* 异步加载数据函数 - 从API路由获取卡片和描述数据 */
   async function loadData() {
+    /* 获取加载和内容元素 */
     const loadingElement = document.getElementById("loading");
     const contentElement = document.getElementById("content");
 
     try {
-      // Fetch cards data
-      const cardsResponse = await fetch("/api/cards");
+      /* 获取卡片数据 */
+      const cardsResponse = await fetch("/api/cards");  /* 调用API获取卡片数据 */
       if (!cardsResponse.ok) {
         throw new Error(
-          `Failed to fetch cards: ${cardsResponse.status} ${cardsResponse.statusText}`
+          `Failed to fetch cards: ${cardsResponse.status} ${cardsResponse.statusText}`  /* 如果请求失败则抛出错误 */
         );
       }
-      const cards: CardData[] = await cardsResponse.json();
+      const cards: CardData[] = await cardsResponse.json();  /* 解析JSON响应 */
 
-      // Fetch description data
-      const descriptionResponse = await fetch("/api/description");
+      /* 获取描述数据 */
+      const descriptionResponse = await fetch("/api/description");  /* 调用API获取描述数据 */
       if (!descriptionResponse.ok) {
         throw new Error(
-          `Failed to fetch description: ${descriptionResponse.status} ${descriptionResponse.statusText}`
+          `Failed to fetch description: ${descriptionResponse.status} ${descriptionResponse.statusText}`  /* 如果请求失败则抛出错误 */
         );
       }
-      const description: DescriptionData = await descriptionResponse.json();
+      const description: DescriptionData = await descriptionResponse.json();  /* 解析JSON响应 */
 
-      // Update title
-      const titleElement = document.getElementById("title");
+      /* 更新页面标题 */
+      const titleElement = document.getElementById("title");  /* 获取标题元素 */
       if (titleElement) {
-        titleElement.innerHTML = description.titleHtml;
+        titleElement.innerHTML = description.titleHtml;  /* 设置HTML格式的标题 */
       }
 
-      // Update description
-      const descriptionElement = document.getElementById("description");
+      /* 更新描述内容 */
+      const descriptionElement = document.getElementById("description");  /* 获取描述元素 */
       if (descriptionElement) {
         descriptionElement.innerHTML = `
           ${description.text}<br />
           <strong>API Routes:</strong>
           <span>${description.code}</span>
-        `;
+        `;  /* 设置描述文本和API信息 */
       }
 
-      // Render cards
-      const cardsList = document.getElementById("cards-list");
+      /* 渲染卡片列表 */
+      const cardsList = document.getElementById("cards-list");  /* 获取卡片列表容器 */
       if (cardsList) {
-        cardsList.innerHTML = cards
+        cardsList.innerHTML = cards  /* 生成卡片HTML */
           .map(
             (card) => `
             <li class="link-card">
@@ -113,25 +119,25 @@ import Layout from "../layouts/Layout.astro";
             </li>
           `
           )
-          .join("");
+          .join("");  /* 将所有卡片连接成一个字符串 */
       }
 
-      // Hide loading and show content
+      /* 隐藏加载动画并显示实际内容 */
       if (loadingElement) {
-        loadingElement.style.display = "none";
+        loadingElement.style.display = "none";  /* 隐藏骨架屏 */
       }
       if (contentElement) {
-        contentElement.style.display = "block";
+        contentElement.style.display = "block";  /* 显示内容 */
       }
     } catch (error) {
-      console.error("Error loading data:", error);
-      // Hide loading on error
+      console.error("Error loading data:", error);  /* 在控制台记录错误 */
+      /* 出错时隐藏加载动画 */
       if (loadingElement) {
-        loadingElement.style.display = "none";
+        loadingElement.style.display = "none";  /* 隐藏骨架屏 */
       }
-      const main = document.querySelector("main");
+      const main = document.querySelector("main");  /* 获取主内容区域 */
       if (main) {
-        main.innerHTML = `
+        main.innerHTML = `  /* 显示错误信息 */
           <h1>Error</h1>
           <p>Failed to load data. Please refresh the page.</p>
         `;
@@ -139,11 +145,11 @@ import Layout from "../layouts/Layout.astro";
     }
   }
 
-  // Load data when page is ready
+  /* 页面加载完成后开始获取数据 */
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", loadData);
+    document.addEventListener("DOMContentLoaded", loadData);  /* 如果页面仍在加载中，则等待DOM加载完成后再执行 */
   } else {
-    loadData();
+    loadData();  /* 如果页面已经加载完成，则立即执行 */
   }
 </script>
 

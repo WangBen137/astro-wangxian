@@ -1,7 +1,8 @@
 ---
-// Clock component using vanilla JavaScript
+/* 使用原生JavaScript实现的时钟组件 */
 ---
 
+/* 显示时钟时间的元素 */
 <span
   id="clock-display"
   style="font-size: 1rem; font-weight: 700; color: rgb(224, 204, 250); font-family: monospace;"
@@ -11,16 +12,18 @@
 
 <script is:inline>
   (function () {
+    /* 获取时钟显示元素 */
     const clockElement = document.getElementById('clock-display');
     if (!clockElement) return;
 
+    /* 更新时钟显示函数 */
     function updateClock() {
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
-      clockElement.textContent = timeStr;
+      const now = new Date();  /* 获取当前时间 */
+      const timeStr = now.toLocaleTimeString('en-US', { hour12: false });  /* 格式化时间为24小时制 */
+      clockElement.textContent = timeStr;  /* 将格式化后的时间更新到显示元素中 */
     }
 
-    updateClock();
-    setInterval(updateClock, 1000);
+    updateClock();            /* 初始化时立即更新一次时间 */
+    setInterval(updateClock, 1000);  /* 每隔1秒更新一次时间 */
   })();
 </script>

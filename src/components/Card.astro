@@ -1,10 +1,12 @@
 ---
+/* 定义组件的属性接口 */
 export interface Props {
-  title: string;
-  body: string;
-  href: string;
+  title: string;      /* 卡片标题 */
+  body: string;       /* 卡片描述文本 */
+  href: string;       /* 链接地址 */
 }
 
+/* 解构获取传递给组件的属性 */
 const { href, title, body } = Astro.props as Props;
 ---
 

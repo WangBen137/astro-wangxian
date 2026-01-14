@@ -1,35 +1,38 @@
 ---
-// Page navigation configuration
+/* 页面导航配置 - 定义站点的所有导航链接 */
 const pages = [
-  { path: "/", label: "Home" },
-  { path: "/components", label: "Comp" },
-  { path: "/inter", label: "Inter" },
-  { path: "/md", label: "MD" },
-  { path: "/mdx", label: "MDX" },
-  { path: "/static", label: "Static" },
+  { path: "/", label: "Home" },        /* 首页 */
+  { path: "/components", label: "Comp" },  /* 组件页面 */
+  { path: "/inter", label: "Inter" },     /* 交互页面 */
+  { path: "/md", label: "MD" },          /* Markdown页面 */
+  { path: "/mdx", label: "MDX" },        /* MDX页面 */
+  { path: "/static", label: "Static" },  /* 静态页面 */
 ];
 
-// Get current path
+/* 规范化路径函数 - 移除路径末尾的斜杠，除了根路径 */
 const normalizePath = (path: string) => {
   if (path === "/") return "/";
-  return path.replace(/\/+$/, "");
+  return path.replace(/\/+$/, "");  /* 移除路径末尾的一个或多个斜杠 */
 };
 
+/* 获取当前页面路径并规范化 */
 const currentPath = normalizePath(Astro.url.pathname);
 ---
 
-<nav class="page-navigator" id="pageNavigator">
-  <ul class="nav-menu" id="navMenu">
+<nav class="page-navigator" id="pageNavigator">  <!-- 页面导航容器 -->
+  <ul class="nav-menu" id="navMenu">  <!-- 导航菜单列表 -->
     {
+      /* 遍历页面配置数组，生成导航项 */
       pages.map((page) => (
-        <li>
-          <a
+        <li>  <!-- 单个导航项 -->
+          <a  /* 导航链接，根据是否为当前页面设置活动状态类 */
             href={page.path}
             class={currentPath === normalizePath(page.path) ? "active" : ""}
           >
-            <span class="link-text">{page.label}</span>
+            <span class="link-text">{page.label}</span>  <!-- 显示导航标签文本 -->
+            {/* 如果是当前页面，则显示活动指示器 */}
             {currentPath === normalizePath(page.path) && (
-              <span class="active-indicator">●</span>
+              <span class="active-indicator">●</span>  <!-- 活动状态指示器 -->
             )}
           </a>
         </li>
