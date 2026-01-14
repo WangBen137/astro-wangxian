@@ -46,66 +46,63 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script>
-  /* 定义卡片数据接口 */
-  interface CardData {
-    href: string;      /* 卡片链接地址 */
-    title: string;     /* 卡片标题 */
-    body: string;      /* 卡片描述 */
-  }
+  // 页面数据定义
+  const cardData = [
+    {
+      href: 'https://docs.astro.build/en/core-concepts/astro-components/',
+      title: 'Components',
+      body: 'Learn how to build reusable UI with Astro components.'
+    },
+    {
+      href: 'https://docs.astro.build/en/core-concepts/routing/',
+      title: 'Routing',
+      body: 'Understand file-based routing and dynamic routes.'
+    },
+    {
+      href: 'https://docs.astro.build/en/guides/fonts/',
+      title: 'Typography',
+      body: 'Add custom fonts and improve your site typography.'
+    },
+    {
+      href: 'https://docs.astro.build/en/guides/images/',
+      title: 'Images',
+      body: 'Optimize and lazy-load images for better performance.'
+    }
+  ];
 
-  /* 定义描述数据接口 */
-  interface DescriptionData {
-    title: string;     /* 标题文本 */
-    titleHtml: string; /* HTML格式的标题 */
-    text: string;      /* 描述文本 */
-    code: string;      /* 代码信息 */
-  }
+  const descriptionData = {
+    title: 'Interactive API Demo',
+    titleHtml: '<span class="text-gradient">API Demo</span>',
+    text: 'This page demonstrates dynamic content loading. All data is embedded directly in the page.',
+    code: 'Data is defined directly in the page frontmatter'
+  };
 
-  /* 异步加载数据函数 - 从API路由获取卡片和描述数据 */
-  async function loadData() {
-    /* 获取加载和内容元素 */
+  // 渲染页面内容
+  function renderContent() {
     const loadingElement = document.getElementById("loading");
     const contentElement = document.getElementById("content");
 
     try {
-      /* 获取卡片数据 */
-      const cardsResponse = await fetch("/api/cards");  /* 调用API获取卡片数据 */
-      if (!cardsResponse.ok) {
-        throw new Error(
-          `Failed to fetch cards: ${cardsResponse.status} ${cardsResponse.statusText}`  /* 如果请求失败则抛出错误 */
-        );
-      }
-      const cards: CardData[] = await cardsResponse.json();  /* 解析JSON响应 */
-
-      /* 获取描述数据 */
-      const descriptionResponse = await fetch("/api/description");  /* 调用API获取描述数据 */
-      if (!descriptionResponse.ok) {
-        throw new Error(
-          `Failed to fetch description: ${descriptionResponse.status} ${descriptionResponse.statusText}`  /* 如果请求失败则抛出错误 */
-        );
-      }
-      const description: DescriptionData = await descriptionResponse.json();  /* 解析JSON响应 */
-
-      /* 更新页面标题 */
-      const titleElement = document.getElementById("title");  /* 获取标题元素 */
+      // 更新标题
+      const titleElement = document.getElementById("title");
       if (titleElement) {
-        titleElement.innerHTML = description.titleHtml;  /* 设置HTML格式的标题 */
+        titleElement.innerHTML = descriptionData.titleHtml;
       }
 
-      /* 更新描述内容 */
-      const descriptionElement = document.getElementById("description");  /* 获取描述元素 */
+      // 更新描述
+      const descriptionElement = document.getElementById("description");
       if (descriptionElement) {
         descriptionElement.innerHTML = `
-          ${description.text}<br />
-          <strong>API Routes:</strong>
-          <span>${description.code}</span>
-        `;  /* 设置描述文本和API信息 */
+          ${descriptionData.text}<br />
+          <strong>Data Source:</strong>
+          <span>${descriptionData.code}</span>
+        `;
       }
 
-      /* 渲染卡片列表 */
-      const cardsList = document.getElementById("cards-list");  /* 获取卡片列表容器 */
+      // 渲染卡片
+      const cardsList = document.getElementById("cards-list");
       if (cardsList) {
-        cardsList.innerHTML = cards  /* 生成卡片HTML */
+        cardsList.innerHTML = cardData
           .map(
             (card) => `
             <li class="link-card">
@@ -119,37 +116,36 @@ import Layout from "../layouts/Layout.astro";
             </li>
           `
           )
-          .join("");  /* 将所有卡片连接成一个字符串 */
+          .join("");
       }
 
-      /* 隐藏加载动画并显示实际内容 */
+      // 隐藏加载动画并显示内容
       if (loadingElement) {
-        loadingElement.style.display = "none";  /* 隐藏骨架屏 */
+        loadingElement.style.display = "none";
       }
       if (contentElement) {
-        contentElement.style.display = "block";  /* 显示内容 */
+        contentElement.style.display = "block";
       }
     } catch (error) {
-      console.error("Error loading data:", error);  /* 在控制台记录错误 */
-      /* 出错时隐藏加载动画 */
+      console.error("Error rendering content:", error);
       if (loadingElement) {
-        loadingElement.style.display = "none";  /* 隐藏骨架屏 */
+        loadingElement.style.display = "none";
       }
-      const main = document.querySelector("main");  /* 获取主内容区域 */
+      const main = document.querySelector("main");
       if (main) {
-        main.innerHTML = `  /* 显示错误信息 */
+        main.innerHTML = `
           <h1>Error</h1>
-          <p>Failed to load data. Please refresh the page.</p>
+          <p>Failed to render content. Please refresh the page.</p>
         `;
       }
     }
   }
 
-  /* 页面加载完成后开始获取数据 */
+  // 页面加载完成后渲染内容
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", loadData);  /* 如果页面仍在加载中，则等待DOM加载完成后再执行 */
+    document.addEventListener("DOMContentLoaded", renderContent);
   } else {
-    loadData();  /* 如果页面已经加载完成，则立即执行 */
+    renderContent();
   }
 </script>
 

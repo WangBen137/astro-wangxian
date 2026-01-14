@@ -1,6 +1,6 @@
 # Astro 模板
 
-这是一个 [Astro](https://astro.build) 项目，展示了各种 Astro 特性和功能。此模板展示了服务器端渲染、API 路由、内容集合、框架集成等功能。
+这是一个 [Astro](https://astro.build) 项目，展示了各种 Astro 特性和功能。此模板展示了服务器端渲染、框架集成和交互式组件。
 
 ## 📚 功能演示
 
@@ -9,20 +9,13 @@
 ### 页面
 
 - **`/`** - 首页，包含基础 Astro 组件和布局
-- **`/components`** - 多框架集成示例，使用 React、Vue 和 Svelte 组件
-- **`/inter`** - 交互式页面，包含 API 路由和服务器端数据获取
-- **`/md`** - 使用 Astro 内容集合的 Markdown 内容示例
-- **`/mdx`** - 结合 Markdown 和 JSX 组件的 MDX 内容示例
-- **`/static`** - 使用预渲染的静态页面生成示例
+- **`/inter`** - 交互式页面，包含嵌入数据和客户端渲染
 
 ### 核心特性
 
 - ✨ **多框架支持** - React、Vue 和 Svelte 集成
 - 🔄 **服务器端渲染** - 使用 EdgeOne Pages 适配器
-- 📝 **内容集合** - Markdown 和 MDX 内容管理
-- 🛣️ **API 路由** - 用于数据获取的服务器端点
 - 🎨 **组件岛屿** - 使用 `client:*` 指令的客户端交互
-- 📦 **内容集合** - 类型安全的内容管理
 
 ## 🧞 命令
 
@@ -47,7 +40,6 @@ Astro 会在 `src/pages/` 目录中寻找 `.astro` 或 `.md` 文件。每个页�
 - [React](https://react.dev) - UI 库
 - [Vue](https://vuejs.org) - 渐进式 JavaScript 框架
 - [Svelte](https://svelte.dev) - 组件框架
-- [MDX](https://mdxjs.com) - 带 JSX 的 Markdown
 - [TypeScript](https://www.typescriptlang.org) - 类型化 JavaScript
 - [EdgeOne Pages](https://edgeone.ai/pages) - 部署平台
 

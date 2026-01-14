@@ -1,5 +1,4 @@
 import { defineCollection } from 'astro:content';
 
-const examples = defineCollection({ type: 'content' });
-
-export const collections = { examples };
+// 当前没有定义内容集合
+export const collections = {};
