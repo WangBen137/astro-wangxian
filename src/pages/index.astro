@@ -1,7 +1,6 @@
 ---
-/* 导入布局组件和卡片组件 */
+/* 导入布局组件 */
 import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card.astro";
 
 /* 获取服务器端渲染时间 */
 const renderTime = new Date();
@@ -28,50 +27,30 @@ const formattedTime = renderTime.toLocaleString("en-US", {
       <strong>Server Render Time:</strong>  <!-- 显示服务器端渲染时间 -->
       <span class="render-time">{formattedTime}</span>
     </p>
-    <!-- 卡片网格容器 -->
-    <ul role="list" class="link-card-grid">
-      <!-- 文档链接卡片 -->
-      <Card
-        href="https://docs.astro.build/"
-        title="Documentation"
-        body="Learn how Astro works and explore the official API docs."
-      />
-      <!-- 集成框架链接卡片 -->
-      <Card
-        href="https://astro.build/integrations/"
-        title="Integrations"
-        body="Supercharge your project with new frameworks and libraries."
-      />
-      <!-- 主题链接卡片 -->
-      <Card
-        href="https://astro.build/themes/"
-        title="Themes"
-        body="Explore a galaxy of community-built starter themes."
-      />
-      <!-- 社区聊天链接卡片 -->
-      <Card
-        href="https://astro.build/chat/"
-        title="Chat"
-        body="Come say hi to our amazing Discord community. ❤️"
-      />
-    </ul>
   </main>
 </Layout>
 
 <style>
   :root {
-    --astro-gradient: linear-gradient(0deg, #4f39fa, #da62c4);
+    --astro-gradient: linear-gradient(135deg, #4f39fa, #da62c4, #6a11cb);
+    --shadow-smooth: 0 8px 32px rgba(31, 38, 135, 0.37);
+    --border-radius: 16px;
   }
 
   h1 {
-    margin: 2rem 0;
+    margin: 2.5rem 0 1.5rem;
     text-align: center;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: -0.02em;
   }
 
   main {
     margin: auto;
-    padding: 1em;
-    max-width: calc(60ch + 80px);
+    padding: 1.5rem;
+    max-width: calc(60ch + 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .text-gradient {
@@ -79,42 +58,46 @@ const formattedTime = renderTime.toLocaleString("en-US", {
     background-image: var(--astro-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-size: 100% 200%;
+    background-size: 200% 200%;
     background-position-y: 100%;
     border-radius: 0.4rem;
-    animation: pulse 4s ease-in-out infinite;
+    animation: gradientShift 6s ease infinite;
+    display: inline-block;
   }
 
-  @keyframes pulse {
-    0%,
-    100% {
-      background-position-y: 0%;
+  @keyframes gradientShift {
+    0%, 100% {
+      background-position: 0% 50%;
     }
     50% {
-      background-position-y: 80%;
+      background-position: 100% 50%;
     }
   }
 
   .instructions {
     line-height: 1.6;
-    margin: 1rem 0;
+    margin: 1.5rem 0;
     border: 1px solid rgba(var(--accent-light), 25%);
     background: linear-gradient(
       rgba(var(--accent-dark), 66%),
       rgba(var(--accent-dark), 33%)
     );
-    padding: 1.5rem;
-    border-radius: 0.5rem;
+    padding: 1.8rem;
+    border-radius: var(--border-radius);
     color: var(--color-text);
+    box-shadow: var(--shadow-smooth);
+    backdrop-filter: blur(4px);
+    max-width: 60ch;
   }
 
   .instructions code {
-    font-size: 0.8em;
+    font-size: 0.85em;
     font-weight: 700;
-    background: rgba(var(--accent-light), 12%);
+    background: rgba(var(--accent-light), 15%);
     color: rgb(var(--accent-light));
-    border-radius: 4px;
-    padding: 0.3em 0.4em;
+    border-radius: 6px;
+    padding: 0.35em 0.5em;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .instructions strong {
@@ -124,14 +107,7 @@ const formattedTime = renderTime.toLocaleString("en-US", {
   .render-time {
     color: rgb(var(--accent-light));
     font-family: Menlo, Monaco, "Courier New", monospace;
-    font-size: 0.9em;
+    font-size: 0.95em;
     font-weight: 600;
-  }
-
-  .link-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-    gap: 1rem;
-    padding: 0;
   }
 </style>
