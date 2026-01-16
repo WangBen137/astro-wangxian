@@ -1,0 +1,34 @@
+---
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import { getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const blogPosts = await getCollection('blog');
+  return blogPosts
+    .filter(post => !post.data.draft)
+    .map(post => ({
+      params: { slug: post.slug },
+      props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+---
+
+<BlogLayout
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  author={post.data.author}
+  tags={post.data.tags}
+>
+  <article>
+    <slot />
+  </article>
+</BlogLayout>
+
+<style>
+  article {
+    line-height: 1.6;
+  }
+</style>

@@ -1,0 +1,91 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from 'astro:content';
+
+const blogPosts = (await getCollection('blog')).filter(post => !post.data.draft).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Layout title="Blog - 我的Astro博客">
+  <main>
+    <h1>我的博客</h1>
+    <p>欢迎来到我的博客，这里分享各种技术文章和思考。</p>
+    
+    {blogPosts.length > 0 ? (
+      <div class="blog-list">
+        {blogPosts.map((post) => (
+          <article class="blog-preview">
+            <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
+            <p class="blog-meta">
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('zh-CN')}
+              </time>
+              {post.data.author && <span> • 作者: {post.data.author}</span>}
+              {post.data.tags && post.data.tags.length > 0 && (
+                <span> • 标签: {post.data.tags.join(', ')}</span>
+              )}
+            </p>
+            <p class="blog-excerpt">{post.data.description}</p>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p>暂无博客文章</p>
+    )}
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1em;
+    max-width: calc(60ch + 80px);
+  }
+
+  h1 {
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .blog-preview {
+    padding: 1.5rem;
+    border: 1px solid rgba(var(--accent-light), 25%);
+    background: linear-gradient(
+      rgba(var(--accent-dark), 66%),
+      rgba(var(--accent-dark), 33%)
+    );
+    border-radius: 0.5rem;
+  }
+
+  .blog-preview h2 {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .blog-preview h2 a {
+    color: rgb(var(--accent-light));
+    text-decoration: none;
+  }
+
+  .blog-preview h2 a:hover {
+    text-decoration: underline;
+  }
+
+  .blog-meta {
+    color: color-mix(in srgb, var(--color-text) 70%, transparent);
+    font-size: 0.9em;
+    margin: 0.5rem 0;
+  }
+
+  .blog-excerpt {
+    margin: 1rem 0 0 0;
+    line-height: 1.6;
+  }
+</style>
